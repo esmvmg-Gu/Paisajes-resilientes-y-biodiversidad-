@@ -18,16 +18,43 @@ function fmtNum(v, opts){
   if(isNaN(n)) return esc(v);
   return n.toLocaleString('es-GT', opts||{});
 }
-function popupBlock(title, rows){
+function popupBlock(title, rows, extraHtml){
   const body = rows
     .filter(r => r[1]!==null && r[1]!==undefined && String(r[1]).trim()!=='' && String(r[1]).trim()!=='NA')
     .map(r => `<div class="pop-row"><span class="pop-k">${esc(r[0])}</span><span class="pop-v">${esc(r[1])}</span></div>`)
     .join('');
-  return `<div class="pop-title">${esc(title)}</div>${body || '<div class="pop-row"><span class="pop-v">Sin datos adicionales</span></div>'}`;
+  return `<div class="pop-title">${esc(title)}</div>${body || (extraHtml ? '' : '<div class="pop-row"><span class="pop-v">Sin datos adicionales</span></div>')}${extraHtml || ''}`;
 }
 function firstNonEmpty(...vals){
   for(const v of vals){ if(v!==null && v!==undefined && String(v).trim()!=='') return v; }
   return null;
+}
+
+/* Small inline SVG bar chart for maize yield (qq/cuerda) across 2023-2025 */
+function maizeYieldChart(rendimientos, color){
+  if(!rendimientos) return '<div class="pop-row"><span class="pop-v">Sin datos de rendimiento para 2025</span></div>';
+  const years = ['2023','2024','2025'];
+  const vals = years.map(y => rendimientos[y] ? rendimientos[y].qq : null);
+  const maxVal = Math.max(...vals.filter(v=>v!==null), 1);
+  const W = 230, H = 100, barW = 46, gap = 20, baseY = 74;
+  let bars = '';
+  years.forEach((y, i) => {
+    const x = 20 + i*(barW+gap);
+    const v = vals[i];
+    if(v === null){
+      bars += `<text x="${x+barW/2}" y="${baseY-4}" text-anchor="middle" font-size="9" fill="#9a9a90">s/d</text>`;
+    } else {
+      const h = Math.max(4, (v/maxVal) * 56);
+      bars += `<rect x="${x}" y="${baseY-h}" width="${barW}" height="${h}" rx="3" fill="${color}"/>`;
+      bars += `<text x="${x+barW/2}" y="${baseY-h-5}" text-anchor="middle" font-size="10" font-weight="700" fill="#3d4237">${v.toFixed(2)}</text>`;
+    }
+    bars += `<text x="${x+barW/2}" y="${baseY+14}" text-anchor="middle" font-size="9.5" fill="#767c6f">${y}</text>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" style="display:block;margin-top:4px;">
+    <line x1="14" y1="${baseY}" x2="${W-14}" y2="${baseY}" stroke="#d8d2bd" stroke-width="1"/>
+    ${bars}
+  </svg>
+  <div style="font-size:10px;color:#9a9a90;text-align:center;margin-top:-2px;">Rendimiento seco, quintales por cuerda</div>`;
 }
 const EMPTY_FC = { type:'FeatureCollection', features:[] };
 
@@ -69,6 +96,7 @@ const ASSET_PATHS = {
   badge_apicultura:'assets/img/badge_apicultura.png',
   badge_estufa:    'assets/img/badge_estufa.png',
   badge_isotopos:  'assets/img/badge_isotopos.png',
+  badge_cedracc:   'assets/img/badge_cedracc.png',
 };
 
 /* ---------------------------------------------------------
@@ -81,6 +109,14 @@ const COBERTURA_COLORS = {
   'Bosque Estacionalmente Seco': '#ffaa00',
   'Bosque Coníferas de Altura': '#00734c',
   'Bosque Latifoliado': '#38a800',
+};
+
+const MAIZE_COLORS = {
+  'Panimatzalam': '#2d4a1e',
+  'Chaquijya': '#6a9a3a',
+  'Chuitzamchaj': '#a89684',
+  'Xesampaul': '#7a1010',
+  'Chuacruz': '#c41414',
 };
 
 const LAYER_DEFS = [
@@ -116,8 +152,8 @@ const LAYER_DEFS = [
   },
   {
     id:'subcuenca_quiscab', group:'base', label:'Subcuenca del Río Quiscab', type:'polygon',
-    color:'#1f6f8b', defaultOn:true, file:'data/subcuenca_quiscab.geojson',
-    style:{color:'#1f6f8b', weight:2, fillOpacity:0.12, fillColor:'#1f6f8b'},
+    color:'#00e6a9', defaultOn:true, file:'data/subcuenca_quiscab.geojson',
+    style:{color:'#00e6a9', weight:4, fillOpacity:0.08, fillColor:'#00e6a9'},
     popup:f=>popupBlock(firstNonEmpty(f.properties.CUENCA,'Subcuenca del Río Quiscab'), [
       ['Extensión', fmtNum(f.properties.Hectares,{maximumFractionDigits:1})+' ha'],
     ])
@@ -308,6 +344,38 @@ const LAYER_DEFS = [
       ['Punto', f.properties.Name],
     ])
   },
+  {
+    id:'estaciones_meteorologicas', group:'comunitaria', label:'Estaciones Meteorológicas', type:'point',
+    color:'#e67e22', icon:'🌡️', defaultOn:true, file:'data/estaciones_meteorologicas.geojson',
+    popup:f=>popupBlock(firstNonEmpty(f.properties.Nombre,'Estación meteorológica'), [
+      ['Institución', f.properties.Institucion],
+    ])
+  },
+  {
+    id:'pluviometros', group:'comunitaria', label:'Pluviómetros', type:'point',
+    color:'#3498db', icon:'🌧️', cluster:true, defaultOn:true, file:'data/pluviometros.geojson',
+    popup:f=>popupBlock(firstNonEmpty(f.properties.Nombre,'Pluviómetro'), [
+      ['Instrumento', f.properties.Instrumento],
+    ])
+  },
+  {
+    id:'cedracc', group:'comunitaria', label:'CEDRACC', type:'point',
+    color:'#3d5a99', image:'badge_cedracc', defaultOn:true, file:'data/cedracc.geojson',
+    popup:f=>popupBlock(firstNonEmpty(f.properties.NombreCompleto,'CEDRACC'), [
+      ['Lugar', f.properties.Lugar],
+    ])
+  },
+  {
+    id:'maiz_rendimiento', group:'comunitaria', label:'Rendimiento de maíz por comunidad', type:'point',
+    color:'#c9a227', icon:'🌽', defaultOn:true, file:'data/maiz_rendimiento.geojson', popupWidth:290,
+    popup:f=>{
+      const barColor = MAIZE_COLORS[f.properties.Comunidad] || '#8a9a3a';
+      return popupBlock(f.properties.Comunidad, [
+        ['Ubicación', f.properties.Ubicacion],
+        ['Productor(a)', f.properties.Productor],
+      ], maizeYieldChart(f.properties.Rendimientos, barColor));
+    }
+  },
 ];
 
 const TABS = [
@@ -324,7 +392,7 @@ const TAB_DESCRIPTIONS = {
   agroecologia: "Agricultores, escuelas de campo y sistemas de captación de agua asociados a prácticas agroecológicas.",
   ecosistemas: "Áreas de conservación, brigadas comunitarias, diagnóstico de estufas y monitoreo de reforestación.",
   economia: "Diagnósticos de fungicultura y apicultura, diplomado ambiental, escuelas Detectives de la Naturaleza y escuelas CEIBIS de educación ambiental.",
-  comunitaria: "Grupos y organizaciones de base, y puntos de muestreo del estudio de isótopos para datar el agua en Atitlán (Fase I y II).",
+  comunitaria: "Grupos comunitarios, estaciones meteorológicas, pluviómetros, CEDRACC, rendimiento de maíz por comunidad, y el estudio de isótopos para datar el agua en Atitlán (Fase I y II).",
 };
 
 /* ---------------------------------------------------------
@@ -387,17 +455,18 @@ async function fetchLayerData(def){
 }
 
 function buildLeafletLayer(def){
+  const popupWidth = def.popupWidth || 280;
   if(def.type === 'polygon' || def.type === 'line'){
     leafletLayers[def.id] = L.geoJSON(def.data, {
       style: def.style,
-      onEachFeature:(f,l)=> l.bindPopup(def.popup(f), {maxWidth:280})
+      onEachFeature:(f,l)=> l.bindPopup(def.popup(f), {maxWidth:popupWidth})
     });
   } else {
     const geo = L.geoJSON(def.data, {
       pointToLayer:(f,latlng)=> L.marker(latlng, {
         icon: def.image ? makeImageIcon(ASSET_PATHS[def.image], def.color) : makePinIcon(def.icon, def.color)
       }),
-      onEachFeature:(f,l)=> l.bindPopup(def.popup(f), {maxWidth:280})
+      onEachFeature:(f,l)=> l.bindPopup(def.popup(f), {maxWidth:popupWidth})
     });
     if(def.cluster){
       const cg = L.markerClusterGroup({
@@ -510,7 +579,7 @@ function applyVisibility(){
   // Keep heavy background reference layers below everything else
   // (each bringToBack() call wins the back-most spot, so the last one
   // in this list ends up furthest back — cobertura_forestal last)
-  ['municipios','departamentos','cobertura_forestal'].forEach(id=>{
+  ['departamentos','municipios','cobertura_forestal'].forEach(id=>{
     const layer = leafletLayers[id];
     if(layer && map.hasLayer(layer) && layer.bringToBack) layer.bringToBack();
   });
