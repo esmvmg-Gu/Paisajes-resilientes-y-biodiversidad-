@@ -366,7 +366,7 @@ const LAYER_DEFS = [
     ])
   },
   {
-    id:'maiz_rendimiento', group:'comunitaria', label:'Rendimiento de maíz por comunidad', type:'point',
+    id:'maiz_rendimiento', group:'comunitaria', label:'Parcelas Agroclimáticas (rendimiento de maíz)', shortLabel:'Parcelas Agroclimáticas', type:'point',
     color:'#c9a227', icon:'🌽', defaultOn:true, file:'data/maiz_rendimiento.geojson', popupWidth:290,
     popup:f=>{
       const barColor = MAIZE_COLORS[f.properties.Comunidad] || '#8a9a3a';
@@ -375,6 +375,27 @@ const LAYER_DEFS = [
         ['Productor(a)', f.properties.Productor],
       ], maizeYieldChart(f.properties.Rendimientos, barColor));
     }
+  },
+  {
+    id:'parcelas_bioclimaticas', group:'comunitaria', label:'Parcelas Bioclimáticas', type:'point',
+    color:'#2e7d32', icon:'🐦', defaultOn:true, file:'data/parcelas_bioclimaticas.geojson', popupWidth:300,
+    popup:f=>popupBlock(f.properties.Nombre, [
+      ['Altitud', fmtNum(f.properties.Altitud)+' msnm'],
+      ['Ecosistema', f.properties.Ecosistema],
+      ['Categoría', f.properties.Categoria],
+      ['Temperatura de referencia', f.properties.TempReferencia!=null ? f.properties.TempReferencia+' °C' : null],
+      ['Última temperatura', f.properties.TempUltima!=null ? f.properties.TempUltima+' °C ('+f.properties.FechaTemp+')' : null],
+      ['Mín / máx último día', (f.properties.TempMin!=null && f.properties.TempMax!=null) ? f.properties.TempMin+' °C / '+f.properties.TempMax+' °C' : null],
+      ['Especies de aves', f.properties.AvesEspecies],
+      ['Individuos registrados', f.properties.AvesIndividuos],
+      ['Registros de aves', f.properties.AvesRegistros],
+      ['Años de monitoreo (aves)', f.properties.AniosAves],
+      ['Árboles medidos', f.properties.ArbolesMedidos],
+      ['Especies de árboles', f.properties.ArbolesEspecies],
+      ['Especies confirmadas', f.properties.ArbolesEspeciesConfirmadas],
+      ['DAP promedio', f.properties.DAPPromedio!=null ? f.properties.DAPPromedio+' cm' : null],
+      ['Crecimiento promedio', f.properties.CrecimientoPromedio!=null ? f.properties.CrecimientoPromedio+' cm' : null],
+    ])
   },
 ];
 
@@ -392,7 +413,7 @@ const TAB_DESCRIPTIONS = {
   agroecologia: "Agricultores, escuelas de campo y sistemas de captación de agua asociados a prácticas agroecológicas.",
   ecosistemas: "Áreas de conservación, brigadas comunitarias, diagnóstico de estufas y monitoreo de reforestación.",
   economia: "Diagnósticos de fungicultura y apicultura, diplomado ambiental, escuelas Detectives de la Naturaleza y escuelas CEIBIS de educación ambiental.",
-  comunitaria: "Grupos comunitarios, estaciones meteorológicas, pluviómetros, CEDRACC, rendimiento de maíz por comunidad, y el estudio de isótopos para datar el agua en Atitlán (Fase I y II).",
+  comunitaria: "Grupos comunitarios, estaciones meteorológicas, pluviómetros, CEDRACC, parcelas agroclimáticas y bioclimáticas, y el estudio de isótopos para datar el agua en Atitlán (Fase I y II).",
 };
 
 /* ---------------------------------------------------------
