@@ -125,7 +125,7 @@ const LAYER_DEFS = [
   {
     id:'departamentos', group:'base', label:'Departamentos', type:'polygon',
     color:'#8a8468', defaultOn:false, file:'data/departamentos.geojson',
-    style:{color:'#8a8468', weight:2.6, dashArray:'2 5', fillOpacity:0.02},
+    style:{color:'#8a8468', weight:4, dashArray:'2 5', fillOpacity:0.02},
     popup:f=>popupBlock(f.properties.DEPARTAMEN, [
       ['Región', f.properties.REGION],
       ['Área', fmtNum(f.properties.AREA_KM2,{maximumFractionDigits:0})+' km²'],
@@ -377,8 +377,13 @@ const LAYER_DEFS = [
     }
   },
   {
+    id:'parcelas_cafe', group:'comunitaria', label:'Parcelas de Café', type:'point',
+    color:'#6f4e37', icon:'', defaultOn:true, file:'data/parcelas_cafe.geojson',
+    popup:f=>popupBlock(firstNonEmpty(f.properties.Nombre,'Parcela de café'), [])
+  },
+  {
     id:'parcelas_bioclimaticas', group:'comunitaria', label:'Parcelas Bioclimáticas', type:'point',
-    color:'#2e7d32', icon:'🐦', defaultOn:true, file:'data/parcelas_bioclimaticas.geojson', popupWidth:300,
+    color:'#2e7d32', icon:'🍃', defaultOn:true, file:'data/parcelas_bioclimaticas.geojson', popupWidth:300,
     popup:f=>popupBlock(f.properties.Nombre, [
       ['Altitud', fmtNum(f.properties.Altitud)+' msnm'],
       ['Ecosistema', f.properties.Ecosistema],
@@ -413,7 +418,7 @@ const TAB_DESCRIPTIONS = {
   agroecologia: "Agricultores, escuelas de campo y sistemas de captación de agua asociados a prácticas agroecológicas.",
   ecosistemas: "Áreas de conservación, brigadas comunitarias, diagnóstico de estufas y monitoreo de reforestación.",
   economia: "Diagnósticos de fungicultura y apicultura, diplomado ambiental, escuelas Detectives de la Naturaleza y escuelas CEIBIS de educación ambiental.",
-  comunitaria: "Grupos comunitarios, estaciones meteorológicas, pluviómetros, CEDRACC, parcelas agroclimáticas y bioclimáticas, y el estudio de isótopos para datar el agua en Atitlán (Fase I y II).",
+  comunitaria: "Grupos comunitarios, estaciones meteorológicas, pluviómetros, CEDRACC, parcelas agroclimáticas, bioclimáticas y de café, y el estudio de isótopos para datar el agua en Atitlán (Fase I y II).",
 };
 
 /* ---------------------------------------------------------
