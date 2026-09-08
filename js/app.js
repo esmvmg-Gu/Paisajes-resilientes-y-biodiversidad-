@@ -68,6 +68,7 @@ const ASSET_PATHS = {
   badge_brigada:   'assets/img/badge_brigada.png',
   badge_apicultura:'assets/img/badge_apicultura.png',
   badge_estufa:    'assets/img/badge_estufa.png',
+  badge_isotopos:  'assets/img/badge_isotopos.png',
 };
 
 /* ---------------------------------------------------------
@@ -268,7 +269,7 @@ const LAYER_DEFS = [
   },
   {
     id:'isotopos_fase1', group:'comunitaria', label:'Isótopos — Fase I (2022)', type:'point',
-    color:'#2e86c1', icon:'⚛️', defaultOn:true, file:'data/isotopos_fase1.geojson',
+    color:'#2e86c1', image:'badge_isotopos', defaultOn:true, file:'data/isotopos_fase1.geojson',
     popup:f=>popupBlock(firstNonEmpty(f.properties.Nombre,'Punto de muestreo'), [
       ['Tipo', f.properties.Tipo],
       ['Coliformes totales (NMP/100mL)', f.properties.Colifor1],
@@ -280,7 +281,7 @@ const LAYER_DEFS = [
   },
   {
     id:'isotopos_fase2', group:'comunitaria', label:'Isótopos — Fase II (2024–2025)', type:'point',
-    color:'#154360', icon:'⚛️', defaultOn:true, file:'data/isotopos_fase2.geojson',
+    color:'#154360', image:'badge_isotopos', defaultOn:true, file:'data/isotopos_fase2.geojson',
     popup:f=>popupBlock(firstNonEmpty(f.properties.Nombre,'Punto de muestreo'), [
       ['Tipo', f.properties.Tipo],
       ['Coliformes totales (NMP/100mL)', f.properties.Colifor1],
