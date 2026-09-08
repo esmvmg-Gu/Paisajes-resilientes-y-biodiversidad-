@@ -89,7 +89,7 @@ const LAYER_DEFS = [
   {
     id:'departamentos', group:'base', label:'Departamentos', type:'polygon',
     color:'#8a8468', defaultOn:false, file:'data/departamentos.geojson',
-    style:{color:'#8a8468', weight:1.3, dashArray:'2 5', fillOpacity:0.02},
+    style:{color:'#8a8468', weight:2.6, dashArray:'2 5', fillOpacity:0.02},
     popup:f=>popupBlock(f.properties.DEPARTAMEN, [
       ['Región', f.properties.REGION],
       ['Área', fmtNum(f.properties.AREA_KM2,{maximumFractionDigits:0})+' km²'],
@@ -99,8 +99,8 @@ const LAYER_DEFS = [
   },
   {
     id:'municipios', group:'base', label:'Municipios', type:'polygon',
-    color:'#1f3a3a', defaultOn:true, file:'data/municipios.geojson',
-    style:{color:'#1f3a3a', weight:1.4, fillOpacity:0.02},
+    color:'#2e9fd6', defaultOn:true, file:'data/municipios.geojson',
+    style:{color:'#2e9fd6', weight:1.4, fillOpacity:0.02},
     popup:f=>popupBlock(f.properties.MUNICIPIOS, [
       ['Departamento', f.properties.DEPARTAMEN],
       ['Área', fmtNum(f.properties.AREA_KM2,{maximumFractionDigits:1})+' km²'],
@@ -112,6 +112,14 @@ const LAYER_DEFS = [
     style:{color:'#c1272d', weight:2.2, dashArray:'7 5', fillOpacity:0.10, fillColor:'#c1272d'},
     popup:f=>popupBlock("Corredor biocultural Zunil–Atitlán–Balam Juyu' (Acatenango)", [
       ['Extensión', fmtNum(Math.round(f.properties.Hectares))+' ha'],
+    ])
+  },
+  {
+    id:'subcuenca_quiscab', group:'base', label:'Subcuenca del Río Quiscab', type:'polygon',
+    color:'#1f6f8b', defaultOn:true, file:'data/subcuenca_quiscab.geojson',
+    style:{color:'#1f6f8b', weight:2, fillOpacity:0.12, fillColor:'#1f6f8b'},
+    popup:f=>popupBlock(firstNonEmpty(f.properties.CUENCA,'Subcuenca del Río Quiscab'), [
+      ['Extensión', fmtNum(f.properties.Hectares,{maximumFractionDigits:1})+' ha'],
     ])
   },
   {
@@ -272,6 +280,7 @@ const LAYER_DEFS = [
     color:'#2e86c1', image:'badge_isotopos', defaultOn:true, file:'data/isotopos_fase1.geojson',
     popup:f=>popupBlock(firstNonEmpty(f.properties.Nombre,'Punto de muestreo'), [
       ['Tipo', f.properties.Tipo],
+      ['Municipio', f.properties.Municipio],
       ['Coliformes totales (NMP/100mL)', f.properties.Colifor1],
       ['E. coli (NMP/100mL)', f.properties.Ecoli1],
       ['Fósforo reactivo (mg/L)', f.properties.PO3],
@@ -284,6 +293,7 @@ const LAYER_DEFS = [
     color:'#154360', image:'badge_isotopos', defaultOn:true, file:'data/isotopos_fase2.geojson',
     popup:f=>popupBlock(firstNonEmpty(f.properties.Nombre,'Punto de muestreo'), [
       ['Tipo', f.properties.Tipo],
+      ['Municipio', f.properties.Municipio],
       ['Coliformes totales (NMP/100mL)', f.properties.Colifor1],
       ['E. coli (NMP/100mL)', f.properties.Ecoli1],
       ['Fósforo reactivo (mg/L)', f.properties.PO3],

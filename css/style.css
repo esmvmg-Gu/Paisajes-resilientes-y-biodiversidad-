@@ -47,6 +47,12 @@ header .title-row{
   gap:clamp(12px,2.4vw,32px);
   flex-wrap:nowrap;
 }
+.logo-group{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-shrink:0;
+}
 .logo-box{
   flex-shrink:0;
   background:#f3f1e9;
@@ -57,9 +63,8 @@ header .title-row{
   justify-content:center;
   padding:6px 10px;
 }
-.logo-box img{display:block; height:44px; width:auto;}
-.logo-box.logo-left img{height:46px;}
-.logo-box.logo-right img{height:34px;}
+.logo-box img{display:block; height:38px; width:auto;}
+.logo-box.logo-box-small img{height:26px;}
 h1{
   font-family:'Inter', sans-serif;
   font-weight:800;
@@ -558,6 +563,10 @@ hr.sep{
 @media (max-width: 760px){
   header{padding:14px 14px 0;}
   .subtitle{display:none;}
+  .logo-group{gap:5px;}
+  .logo-box{padding:4px 6px;}
+  .logo-box img{height:26px;}
+  .logo-box.logo-box-small img{height:18px;}
   nav.tabs button{font-size:12.5px; padding:11px 12px 10px;}
   #panel{
     top:auto; bottom:0; right:0; left:0;
