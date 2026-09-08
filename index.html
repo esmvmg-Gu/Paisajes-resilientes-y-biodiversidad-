@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Paisajes Resilientes y Biodiversidad · Subcuenca del Río Quiscab</title>
+<meta name="description" content="Mapa interactivo de agroecología, gestión de ecosistemas, economía rural e investigación y organización comunitaria en la subcuenca del río Quiscab y el corredor biocultural Zunil–Atitlán–Balam Juyu' (Acatenango), Guatemala.">
+
+<!-- Open Graph / social preview -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Paisajes Resilientes y Biodiversidad · Subcuenca del Río Quiscab">
+<meta property="og:description" content="Mapa interactivo participativo: agroecología, gestión de ecosistemas, economía rural e investigación comunitaria en la cuenca de Atitlán, Guatemala.">
+<meta property="og:image" content="assets/img/corredor_preview.png">
+
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css" />
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div class="loading-spinner"></div>
+  <div id="loading-title">Paisajes Resilientes</div>
+  <div id="loading-text">Cargando capas de datos…</div>
+</div>
+
+<div id="app">
+  <header>
+    <div class="title-row">
+      <div class="logo-box logo-left"><img src="assets/img/logo_vivamos_mejor.png" alt="Vivamos Mejor Guatemala"></div>
+      <h1>Paisajes resilientes y biodiversidad en la subcuenca del río Quiscab y el corredor biocultural Zunil &ndash; Atitlán &ndash; Balam Juyu' (Acatenango).</h1>
+      <div class="logo-box logo-right"><img src="assets/img/logo_vivamos.png" alt="Vivamos"></div>
+    </div>
+    <nav class="tabs" id="tabs"></nav>
+  </header>
+
+  <div id="map-wrap">
+    <div id="map"></div>
+
+    <div id="error-banner"></div>
+
+    <div id="top-left-stack">
+      <div id="info-chip">
+        <b id="info-title">Panorama General</b>
+        <span id="info-text">Cargando datos del territorio…</span>
+      </div>
+
+      <div id="forest-legend">
+        <div class="forest-legend-title">Cobertura forestal</div>
+        <div class="forest-legend-chips">
+          <span class="chip"><i style="background:#a8a800"></i>Bosque Mixto</span>
+          <span class="chip"><i style="background:#ffaa00"></i>Bosque Estacionalmente Seco</span>
+          <span class="chip"><i style="background:#00734c"></i>Bosque Coníferas de Altura</span>
+          <span class="chip"><i style="background:#38a800"></i>Bosque Latifoliado</span>
+        </div>
+      </div>
+    </div>
+
+    <button id="panel-toggle">Capas ▾</button>
+
+    <div id="panel">
+      <div class="panel-head">
+        <h2>Capas del mapa</h2>
+        <button id="panel-close">✕</button>
+      </div>
+      <div id="panel-tab-desc"></div>
+      <div id="panel-body"></div>
+      <div id="panel-footer">
+        <strong>Fuente:</strong> levantamientos comunitarios y participativos 2025–2027. Coordenadas GPS de campo (ODK/Kobo) y cartografía base institucional, reproyectadas a WGS84.
+      </div>
+    </div>
+
+    <div id="basemap-switch">
+      <button data-base="claro">Claro</button>
+      <button data-base="satelite" class="active">Satélite</button>
+      <button data-base="topo">Topográfico</button>
+    </div>
+
+    <div id="isotopos-corner">
+      <img id="isotopos-thumb" src="assets/img/isotopos_expansion_estudio.jpg" alt="Expansión del Estudio">
+      <div class="isotopos-corner-text">
+        <b>Expansión del Estudio</b>
+        <span>Isótopos · Fase I vs Fase II</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="image-modal">
+  <div class="modal-box">
+    <button class="modal-close" id="modal-close">✕</button>
+    <img id="modal-image" src="assets/img/isotopos_expansion_estudio.jpg" alt="Expansión del estudio de isótopos">
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.min.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
