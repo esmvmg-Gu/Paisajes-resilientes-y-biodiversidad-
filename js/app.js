@@ -99,7 +99,7 @@ const LAYER_DEFS = [
   {
     id:'municipios', group:'base', label:'Municipios', type:'polygon',
     color:'#1f3a3a', defaultOn:true, file:'data/municipios.geojson',
-    style:{color:'#1f3a3a', weight:1.1, fillOpacity:0.02},
+    style:{color:'#1f3a3a', weight:1.4, fillOpacity:0.02},
     popup:f=>popupBlock(f.properties.MUNICIPIOS, [
       ['Departamento', f.properties.DEPARTAMEN],
       ['Área', fmtNum(f.properties.AREA_KM2,{maximumFractionDigits:1})+' km²'],
@@ -268,7 +268,7 @@ const LAYER_DEFS = [
   },
   {
     id:'isotopos_fase1', group:'comunitaria', label:'Isótopos — Fase I (2022)', type:'point',
-    color:'#2e86c1', icon:'🧪', defaultOn:true, file:'data/isotopos_fase1.geojson',
+    color:'#2e86c1', icon:'⚛️', defaultOn:true, file:'data/isotopos_fase1.geojson',
     popup:f=>popupBlock(firstNonEmpty(f.properties.Nombre,'Punto de muestreo'), [
       ['Tipo', f.properties.Tipo],
       ['Coliformes totales (NMP/100mL)', f.properties.Colifor1],
@@ -280,7 +280,7 @@ const LAYER_DEFS = [
   },
   {
     id:'isotopos_fase2', group:'comunitaria', label:'Isótopos — Fase II (2024–2025)', type:'point',
-    color:'#154360', icon:'🧪', defaultOn:true, file:'data/isotopos_fase2.geojson',
+    color:'#154360', icon:'⚛️', defaultOn:true, file:'data/isotopos_fase2.geojson',
     popup:f=>popupBlock(firstNonEmpty(f.properties.Nombre,'Punto de muestreo'), [
       ['Tipo', f.properties.Tipo],
       ['Coliformes totales (NMP/100mL)', f.properties.Colifor1],
@@ -564,6 +564,26 @@ document.getElementById('panel-toggle').addEventListener('click', ()=>{
 });
 document.getElementById('panel-close').addEventListener('click', ()=>{
   document.getElementById('panel').classList.remove('open');
+});
+
+/* Share current tab view */
+document.getElementById('share-btn').addEventListener('click', async ()=>{
+  const url = location.origin + location.pathname + '#' + activeTab;
+  const toast = document.getElementById('share-toast');
+  try{
+    await navigator.clipboard.writeText(url);
+  }catch(e){
+    // Fallback for browsers/contexts without clipboard API permission
+    const tmp = document.createElement('textarea');
+    tmp.value = url;
+    document.body.appendChild(tmp);
+    tmp.select();
+    document.execCommand('copy');
+    document.body.removeChild(tmp);
+  }
+  toast.classList.add('show');
+  clearTimeout(window._shareToastTimer);
+  window._shareToastTimer = setTimeout(()=> toast.classList.remove('show'), 2200);
 });
 
 /* Image modal (Expansión del Estudio — isótopos) */
