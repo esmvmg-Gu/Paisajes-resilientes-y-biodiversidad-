@@ -135,7 +135,7 @@ const LAYER_DEFS = [
   },
   {
     id:'municipios', group:'base', label:'Municipios', type:'polygon', nationalExtent:true,
-    color:'#2e9fd6', defaultOn:true, file:'data/municipios.geojson',
+    color:'#2e9fd6', defaultOn:false, file:'data/municipios.geojson',
     style:{color:'#2e9fd6', weight:1.4, fillOpacity:0.02},
     popup:f=>popupBlock(f.properties.MUNICIPIOS, [
       ['Departamento', f.properties.DEPARTAMEN],
