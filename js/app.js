@@ -124,8 +124,8 @@ const LAYER_DEFS = [
   // ---------------- BASE (Shapes base) ----------------
   {
     id:'departamentos', group:'base', label:'Departamentos', type:'polygon', nationalExtent:true,
-    color:'#8a8468', defaultOn:false, file:'data/departamentos.geojson',
-    style:{color:'#8a8468', weight:4, dashArray:'2 5', fillOpacity:0.02},
+    color:'#6e6e6e', defaultOn:false, file:'data/departamentos.geojson',
+    style:{color:'#6e6e6e', weight:4, fillOpacity:0.02},
     popup:f=>popupBlock(f.properties.DEPARTAMEN, [
       ['Región', f.properties.REGION],
       ['Área', fmtNum(f.properties.AREA_KM2,{maximumFractionDigits:0})+' km²'],
@@ -135,8 +135,8 @@ const LAYER_DEFS = [
   },
   {
     id:'municipios', group:'base', label:'Municipios', type:'polygon', nationalExtent:true,
-    color:'#2e9fd6', defaultOn:false, file:'data/municipios.geojson',
-    style:{color:'#2e9fd6', weight:1.4, fillOpacity:0.02},
+    color:'#29abe2', defaultOn:false, file:'data/municipios.geojson',
+    style:{color:'#29abe2', weight:2.4, fillOpacity:0.02},
     popup:f=>popupBlock(f.properties.MUNICIPIOS, [
       ['Departamento', f.properties.DEPARTAMEN],
       ['Área', fmtNum(f.properties.AREA_KM2,{maximumFractionDigits:1})+' km²'],
