@@ -123,7 +123,7 @@ const LAYER_DEFS = [
 
   // ---------------- BASE (Shapes base) ----------------
   {
-    id:'departamentos', group:'base', label:'Departamentos', type:'polygon',
+    id:'departamentos', group:'base', label:'Departamentos', type:'polygon', nationalExtent:true,
     color:'#8a8468', defaultOn:false, file:'data/departamentos.geojson',
     style:{color:'#8a8468', weight:4, dashArray:'2 5', fillOpacity:0.02},
     popup:f=>popupBlock(f.properties.DEPARTAMEN, [
@@ -134,7 +134,7 @@ const LAYER_DEFS = [
     ])
   },
   {
-    id:'municipios', group:'base', label:'Municipios', type:'polygon',
+    id:'municipios', group:'base', label:'Municipios', type:'polygon', nationalExtent:true,
     color:'#2e9fd6', defaultOn:true, file:'data/municipios.geojson',
     style:{color:'#2e9fd6', weight:1.4, fillOpacity:0.02},
     popup:f=>popupBlock(f.properties.MUNICIPIOS, [
@@ -575,6 +575,13 @@ function layerRow(def){
     visible[def.id] = e.target.checked;
     applyVisibility();
     updateInfoChip();
+    if(e.target.checked && def.nationalExtent){
+      const layer = leafletLayers[def.id];
+      try{
+        const b = layer.getBounds();
+        if(b && b.isValid()) map.flyToBounds(b, {padding:[24,24], duration:0.7});
+      }catch(err){ /* no-op */ }
+    }
   });
   row.appendChild(label);
 
